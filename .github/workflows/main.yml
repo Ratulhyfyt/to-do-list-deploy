@@ -9,7 +9,7 @@ name: Node.js
 env:
   AZURE_WEBAPP_NAME: level1task   # Set this to your application's name
   AZURE_WEBAPP_PACKAGE_PATH: 'Production_server.zip'      # Set this to the path to your web app project, defaults to the repository root
-  NODE_VERSION: '18.x'                # Set this to the node version to use
+  NODE_VERSION: '23.11.0'                # Set this to the node version to use
 
 jobs:
   build-and-deploy:
@@ -35,7 +35,6 @@ jobs:
         npm install
         npm run build --if-present
         npm run test --if-present
-      working-directory:  my-app-path
                
     # Deploy web app by using Azure credentials
     - uses: azure/webapps-deploy@v3
