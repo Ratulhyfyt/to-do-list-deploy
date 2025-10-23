@@ -1,9 +1,16 @@
 <script setup lang="ts">
-import TheWelcome from '../components/TheWelcome.vue'
+import List from '../components/List.vue';
 </script>
 
 <template>
-  <main>
-    <TheWelcome />
-  </main>
+    <div class="home">
+      <h1>
+        This is HomeView
+      </h1>
+      <List></List>
+    </div>
 </template>
+
+<style>
+
+</style>
