@@ -1,0 +1,49 @@
+on: [push]
+
+permissions:
+      id-token: write
+      contents: read
+
+name: Node.js
+
+env:
+  AZURE_WEBAPP_NAME: level1task   # Set this to your application's name
+  AZURE_WEBAPP_PACKAGE_PATH: 'Production_server.zip'      # Set this to the path to your web app project, defaults to the repository root
+  NODE_VERSION: '18.x'                # Set this to the node version to use
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    # Check out the repo
+    - name: 'Checkout GitHub Action' 
+      uses: actions/checkout@main
+   
+    - uses: azure/login@v2
+      with:
+        client-id: a06025ec-6aea-499f-83e5-98ad0f380c3d
+        tenant-id: f6560a47-6195-4eb4-a9f2-7bd846edc0f8
+        subscription-id: 15be8894-74c2-47ff-99d9-35975313135b
+        
+    - name: Setup Node ${{ env.NODE_VERSION }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+    
+    - name: 'npm install, build, and test'
+      run: |
+        npm install
+        npm run build --if-present
+        npm run test --if-present
+      working-directory:  my-app-path
+               
+    # Deploy web app by using Azure credentials
+    - uses: azure/webapps-deploy@v3
+      with:
+        app-name: ${{ env.AZURE_WEBAPP_NAME }}
+        package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+
+    # Azure logout 
+    - name: logout
+      run: |
+        az logout
